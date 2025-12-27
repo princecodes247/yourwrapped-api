@@ -12,7 +12,7 @@ export const setupApp = (...routes: { path: string; router: Router }[]) => {
   app.use(
     cors({
       // origin: ["http://lvh.me:3000"],
-      origin: ["http://localhost:5173", "https://flagcontrol.com", "https://www.flagcontrol.com"],
+      origin: ["http://localhost:5173", "https://yourwrapped.com", "https://www.yourwrapped.com"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     }),
