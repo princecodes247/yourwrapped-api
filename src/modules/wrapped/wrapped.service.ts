@@ -15,3 +15,8 @@ export const getWrappedById = async (id: string) => {
     const wrapped = await collections.wrapped.findOne({ id })
     return wrapped
 }
+
+export const getAllWrapped = async () => {
+    const wrapped = await collections.wrapped.find({})
+    return wrapped
+}

@@ -9,5 +9,6 @@ const router = createRouter({
 
 router.post('/', validateRequest({ body: createWrappedSchema }), wrappedController.createWrapped)
 router.get('/:slug', wrappedController.getWrapped)
+router.get('/', wrappedController.getAllWrapped)
 
 export default router
