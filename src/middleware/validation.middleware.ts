@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express'
-import { ZodTypeAny } from 'zod'
+import type { NextFunction, Request, Response } from 'express'
+import type { ZodTypeAny } from 'zod'
 import logger from '../lib/logger'
 
 export class ValidationError extends Error {
