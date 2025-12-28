@@ -1,4 +1,4 @@
-import { collections } from '../../db'
+import { collections, db } from '../../db'
 import type { WrappedInput } from './wrapped.schema'
 
 export const createWrapped = async (input: WrappedInput) => {
@@ -17,6 +17,74 @@ export const getWrappedById = async (id: string) => {
 }
 
 export const getAllWrapped = async () => {
-    const wrapped = await collections.wrapped.find({})
-    return wrapped
+    const [
+        totalWraps,
+        topThemeResult,
+        topEraResult,
+        topMusicResult,
+        themeDistribution,
+        musicDistribution,
+        topEras,
+        wrapsOverTime,
+        // results
+    ] = await Promise.all([
+        collections.wrapped.countDocuments({}),
+        db.collection('wrapped').aggregate([
+            { $match: { accentTheme: { $exists: true, $ne: null } } },
+            { $group: { _id: "$accentTheme", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 1 }
+        ]).toArray(),
+        db.collection('wrapped').aggregate([
+            { $match: { mainCharacterEra: { $exists: true, $ne: null } } },
+            { $group: { _id: "$mainCharacterEra", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 1 }
+        ]).toArray(),
+        db.collection('wrapped').aggregate([
+            { $match: { bgMusic: { $exists: true, $ne: null } } },
+            { $group: { _id: "$bgMusic", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 1 }
+        ]).toArray(),
+        db.collection('wrapped').aggregate([
+            { $match: { accentTheme: { $exists: true, $ne: null } } },
+            { $group: { _id: "$accentTheme", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]).toArray(),
+        db.collection('wrapped').aggregate([
+            { $match: { bgMusic: { $exists: true, $ne: null } } },
+            { $group: { _id: "$bgMusic", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]).toArray(),
+        db.collection('wrapped').aggregate([
+            { $match: { mainCharacterEra: { $exists: true, $ne: null } } },
+            { $group: { _id: "$mainCharacterEra", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]).toArray(),
+        db.collection('wrapped').aggregate([
+            {
+                $group: {
+                    _id: {
+                        $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$createdAt" } }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]).toArray(),
+        // db.collection('wrapped').find({}).sort({ createdAt: -1 }).toArray()
+    ])
+
+    return {
+        totalWraps,
+        topTheme: topThemeResult[0] || null,
+        topEra: topEraResult[0] || null,
+        topMusic: topMusicResult[0] || null,
+        themeDistribution,
+        musicDistribution,
+        topEras,
+        wrapsOverTime,
+        // results
+    }
 }
