@@ -28,7 +28,10 @@ export const Wrapped = createSchema('wrapped', {
     eraVariant: string().optional(),
     topPhrase: string().optional(),
     phraseVariant: string().optional(),
-    topEmotions: array(string()).optional(),
+    topEmotions: array(object({
+        id: string(),
+        percentage: string().optional(),
+    })).optional(),
     emotionsVariant: string().optional(),
     obsessions: array(string()).optional(),
     obsessionsVariant: string().optional(),
