@@ -153,8 +153,8 @@ export class CompositeLogger extends Logger {
 }
 
 const logger = new CompositeLogger(
-  new ConsoleLogger(env?.LOG_LEVEL),
-  new FileLogger('/logs/app.log', env?.LOG_LEVEL),
+  new ConsoleLogger((process.env?.LOG_LEVEL || LogLevel.DEBUG) as LogLevelType),
+  new FileLogger('/logs/app.log', (process.env?.LOG_LEVEL || LogLevel.DEBUG) as LogLevelType),
 )
 
 export default logger
