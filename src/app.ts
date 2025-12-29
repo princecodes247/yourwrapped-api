@@ -9,14 +9,48 @@ import logger from './lib/logger'
 export const setupApp = (...routes: { path: string; router: Router }[]) => {
   const app = express()
   app.use(cookieParser());
+
+  const allowedBaseDomains = [
+    "yourwrapped.com",
+  ]
+
   app.use(
     cors({
-      // origin: ["http://lvh.me:3000"],
-      origin: ["http://localhost:5173", "https://yourwrapped.com", "https://www.yourwrapped.com"],
+      origin: (origin, callback) => {
+        // Allow non-browser requests (curl, server-to-server)
+        if (!origin) return callback(null, true)
+
+        let hostname: string
+
+        try {
+          hostname = new URL(origin).hostname
+        } catch {
+          return callback(new Error("Invalid origin"))
+        }
+
+        // Allow localhost (dev)
+        if (
+          hostname === "localhost" ||
+          hostname.endsWith(".localhost")
+        ) {
+          return callback(null, true)
+        }
+
+        // Allow any subdomain of allowed base domains
+        const isAllowed = allowedBaseDomains.some(
+          (base) =>
+            hostname === base || hostname.endsWith(`.${base}`)
+        )
+
+        if (isAllowed) return callback(null, true)
+
+        return callback(new Error("Not allowed by CORS"))
+      },
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    }),
+    })
   )
+
   app.options('/{*splat}', cors())
   // Create API router to handle all API routes
   const apiRouter = express.Router()
