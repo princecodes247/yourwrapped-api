@@ -103,11 +103,11 @@ export class ConsoleLogger extends Logger {
     meta?: LoggerMeta,
   ): void {
     const pill = this.makePill(level)
-    const metaText =
-      meta && Object.keys(meta).length
-        ? chalk.dim(JSON.stringify(meta))
-        : ''
-    console.log(`${this.timestamp()} ${pill} ${message} ${metaText}`)
+    // const metaText =
+    //   meta && Object.keys(meta).length
+    //     ? chalk.dim(JSON.stringify(meta))
+    //     : ''
+    console.log(`${this.timestamp()} ${pill} ${message}`, meta ?? "")
   }
 }
 
