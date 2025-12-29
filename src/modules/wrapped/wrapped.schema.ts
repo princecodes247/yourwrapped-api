@@ -21,7 +21,7 @@ export const Wrapped = createSchema('wrapped', {
     relationship: literal('partner', 'other', 'best-friend', 'friend', 'sibling', 'parent', 'child', 'enemy'),
 
     accentTheme: string().default('default'),
-    bgMusic: string().default('none'),
+    bgMusic: string().default('calm'),
     year: number().default(new Date().getFullYear()),
 
     mainCharacterEra: string().optional(),
