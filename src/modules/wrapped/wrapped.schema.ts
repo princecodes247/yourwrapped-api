@@ -44,6 +44,9 @@ export const Wrapped = createSchema('wrapped', {
     creatorName: string().optional(),
     creatorVariant: string().optional(),
 
+    memories: array(string()).optional(),
+    memoriesVariant: string().optional(),
+
     userId: string().optional(),
 
     isPremium: boolean().default(false),
