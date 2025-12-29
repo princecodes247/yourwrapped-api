@@ -16,7 +16,7 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(['info', 'warn', 'error', 'debug']).default('info'),
 
   // S3 Configuration
-  S3_BUCKET_NAME: z.string(),
+  S3_BUCKET: z.string(),
   S3_REGION: z.string(),
   S3_ACCESS_KEY_ID: z.string(),
   S3_SECRET_ACCESS_KEY: z.string(),

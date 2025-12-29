@@ -78,7 +78,7 @@ export const getImage = async (req: Request, res: Response) => {
 
     try {
         const command = new GetObjectCommand({
-            Bucket: env.S3_BUCKET_NAME,
+            Bucket: env.S3_BUCKET,
             Key: key,
         })
 

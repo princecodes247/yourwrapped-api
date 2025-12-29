@@ -6,7 +6,7 @@ import env from '../config'
 
 const storage = multerS3({
     s3: s3,
-    bucket: env.S3_BUCKET_NAME,
+    bucket: env.S3_BUCKET,
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, cb) {
