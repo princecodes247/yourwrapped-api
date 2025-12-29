@@ -63,3 +63,37 @@ export const slugify = (text: string) => {
     .replace(/[^\w\-]+/g, "") // Remove all non-word chars
     .replace(/\-\-+/g, "-") // Replace multiple - with single -
 }
+
+export const sanitizeSensitiveData = (data: any, additionalKeys: string[] = []): any => {
+  if (!data || typeof data !== 'object') {
+    return data
+  }
+
+  const sensitiveKeys = [
+    'password',
+    'token',
+    'secret',
+    'authorization',
+    'accessToken',
+    'refreshToken',
+    ...additionalKeys
+  ].map(k => k.toLowerCase())
+
+  if (Array.isArray(data)) {
+    return data.map(item => sanitizeSensitiveData(item, additionalKeys))
+  }
+
+  const sanitized: any = {}
+
+  for (const [key, value] of Object.entries(data)) {
+    if (sensitiveKeys.some(k => key.toLowerCase().includes(k))) {
+      sanitized[key] = '***'
+    } else if (typeof value === 'object' && value !== null) {
+      sanitized[key] = sanitizeSensitiveData(value, additionalKeys)
+    } else {
+      sanitized[key] = value
+    }
+  }
+
+  return sanitized
+}

@@ -1,6 +1,7 @@
 import type { NextFunction, Request, RequestHandler, Response } from "express"
 import express, { Router } from "express"
 import logger from "./logger"
+import { sanitizeSensitiveData } from "./utils"
 
 type AsyncController = RequestHandler
 
@@ -10,10 +11,10 @@ type RouterConfig = {
   logger?: typeof console.log
 }
 
-const defaultLogger = (message: string) => {
+const defaultLogger = (message: string, meta?: any) => {
 
   if (process.env.NODE_ENV !== "test") {
-    logger.info(message)
+    logger.info(message, sanitizeSensitiveData(meta))
   }
 }
 
@@ -63,7 +64,7 @@ export const asyncHandler = (fn: AsyncController, config?: RouterConfig): Reques
     try {
       if (!config?.silent) {
         (config?.logger ?? defaultLogger)(
-          `[${config?.name ? config?.name + " " : ""}Handler] Executing ${req.method} ${req.path}`
+          `[${config?.name ? config?.name + " " : ""}Handler] Executing ${req.method} ${req.path}`, { body: req?.body ?? {} }
         )
       }
       await fn(req, res, next)
