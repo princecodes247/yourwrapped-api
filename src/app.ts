@@ -32,6 +32,7 @@ export const setupApp = (...routes: { path: string; router: Router }[]) => {
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use('/uploads', express.static('uploads'))
   // app.use(express.raw({ type: '*/*', limit: '20mb' }));
 
   // Mount all routes under the API router

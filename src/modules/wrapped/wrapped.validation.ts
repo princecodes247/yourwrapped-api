@@ -27,6 +27,9 @@ export const createWrappedSchema = z.object({
     creatorName: z.string().optional(),
     creatorVariant: z.string().optional(),
 
+    memories: z.array(z.string()).optional(),
+    memoriesVariant: z.string().optional(),
+
     previewId: z.string().optional(),
 
     isPremium: z.boolean().optional().default(false),
