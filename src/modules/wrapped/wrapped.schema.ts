@@ -35,7 +35,7 @@ export const Wrapped = createSchema('wrapped', {
     favorites: array(string()).optional(),
     favoritesVariant: string().optional(),
     quietImprovement: string().optional(),
-    improvementVariant: string().optional(),
+    improvementVariant: array(string()).optional(),
     outroMessage: string().optional(),
     outroVariant: string().optional(),
     creatorName: string().optional(),
