@@ -37,3 +37,11 @@ export const createWrappedSchema = z.object({
 })
 
 export type CreateWrappedInput = z.infer<typeof createWrappedSchema>
+
+export const getWrapsSchema = z.object({
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+    cursor: z.string().optional(),
+    sort: z.enum(['asc', 'desc']).default('desc'),
+})
+
+export type GetWrapsInput = z.infer<typeof getWrapsSchema>

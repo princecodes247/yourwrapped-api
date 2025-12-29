@@ -94,3 +94,29 @@ export const getWrappedStats = async () => {
         // results
     }
 }
+
+export const getWraps = async (params: { limit: number; cursor?: string; sort: 'asc' | 'desc' }) => {
+    const { limit, cursor, sort } = params
+    const query: any = {}
+
+    if (cursor) {
+        const cursorDate = new Date(cursor)
+        if (!isNaN(cursorDate.getTime())) {
+            query.createdAt = sort === 'desc' ? { $lt: cursorDate } : { $gt: cursorDate }
+        }
+    }
+
+    const items = await collections.wrapped.find(query)
+        .sort({ createdAt: sort === 'desc' ? -1 : 1 })
+        .limit(limit + 1) // Fetch one extra to check for next page
+
+
+    const hasNextPage = items.length > limit
+    const edges = hasNextPage ? items.slice(0, limit) : items
+
+    return {
+        items: edges,
+        nextCursor: hasNextPage ? edges[edges.length - 1]?.createdAt : null,
+        hasNextPage
+    }
+}
