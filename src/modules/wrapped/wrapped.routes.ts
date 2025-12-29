@@ -14,6 +14,6 @@ router.post('/upload', upload.single('image'), wrappedController.uploadImage)
 router.get('/image', wrappedController.getImage)
 router.post('/', validateRequest({ body: createWrappedSchema }), wrappedController.createWrapped)
 router.get('/:slug', wrappedController.getWrapped)
-router.get('/', devOnlyMiddleware, wrappedController.getAllWrapped)
+router.get('/', devOnlyMiddleware, wrappedController.getWrappedStats)
 
 export default router

@@ -16,9 +16,10 @@ export const getWrappedById = async (id: string) => {
     return wrapped
 }
 
-export const getAllWrapped = async () => {
+export const getWrappedStats = async () => {
     const [
         totalWraps,
+        users,
         topThemeResult,
         topEraResult,
         topMusicResult,
@@ -29,6 +30,10 @@ export const getAllWrapped = async () => {
         // results
     ] = await Promise.all([
         collections.wrapped.countDocuments({}),
+        db.collection('wrapped').aggregate([
+            { $group: { _id: "$userId" } },
+            { $count: "count" },
+        ]).toArray(),
         db.collection('wrapped').aggregate([
             { $match: { accentTheme: { $exists: true, $ne: null } } },
             { $group: { _id: "$accentTheme", count: { $sum: 1 } } },
@@ -78,6 +83,7 @@ export const getAllWrapped = async () => {
 
     return {
         totalWraps,
+        users,
         topTheme: topThemeResult[0] || null,
         topEra: topEraResult[0] || null,
         topMusic: topMusicResult[0] || null,

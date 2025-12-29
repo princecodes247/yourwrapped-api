@@ -42,8 +42,8 @@ export const getWrapped = async (req: Request, res: Response) => {
     res.json(wrapped)
 }
 
-export const getAllWrapped = async (req: Request, res: Response) => {
-    const wrapped = await wrappedService.getAllWrapped()
+export const getWrappedStats = async (req: Request, res: Response) => {
+    const wrapped = await wrappedService.getWrappedStats()
     res.json(wrapped)
 }
 
