@@ -27,7 +27,7 @@ const envSchema = z.object({
 const parsedEnv = envSchema.safeParse(process.env)
 
 if (!parsedEnv.success) {
-  logger.error('❌ Invalid environment variables:', parsedEnv.error.format())
+  logger.error('❌ Invalid environment variables:', { issues: parsedEnv.error.issues })
   process.exit(1) // Exit the application if environment validation fails
 }
 
