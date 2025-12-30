@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.958.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "chalk": "^5.6.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -27,6 +28,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "http-terminator": "^3.2.0",
+    "jsonwebtoken": "^9.0.3",
     "monarch-orm": "^0.8.1",
     "multer": "^2.0.2",
     "multer-s3": "^3.0.1",

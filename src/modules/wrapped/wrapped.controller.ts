@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
-import { asyncHandler } from '../../lib/utils'
 import * as wrappedService from './wrapped.service'
+import { getWrapsSchema } from './wrapped.validation'
+
 
 import { randomUUID } from 'crypto'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
@@ -42,10 +43,17 @@ export const getWrapped = async (req: Request, res: Response) => {
     res.json(wrapped)
 }
 
-export const getAllWrapped = async (req: Request, res: Response) => {
-    const wrapped = await wrappedService.getAllWrapped()
+export const getWrappedStats = async (req: Request, res: Response) => {
+    const wrapped = await wrappedService.getWrappedStats()
     res.json(wrapped)
 }
+
+export const getWraps = async (req: Request, res: Response) => {
+    const query = getWrapsSchema.parse(req.query)
+    const result = await wrappedService.getWraps(query)
+    res.json(result)
+}
+
 
 export const uploadImage = async (req: Request, res: Response) => {
     if (!req.file) {

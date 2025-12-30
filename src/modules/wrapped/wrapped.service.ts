@@ -16,9 +16,10 @@ export const getWrappedById = async (id: string) => {
     return wrapped
 }
 
-export const getAllWrapped = async () => {
+export const getWrappedStats = async () => {
     const [
         totalWraps,
+        users,
         topThemeResult,
         topEraResult,
         topMusicResult,
@@ -29,6 +30,10 @@ export const getAllWrapped = async () => {
         // results
     ] = await Promise.all([
         collections.wrapped.countDocuments({}),
+        db.collection('wrapped').aggregate([
+            { $group: { _id: "$userId" } },
+            { $count: "count" },
+        ]).toArray(),
         db.collection('wrapped').aggregate([
             { $match: { accentTheme: { $exists: true, $ne: null } } },
             { $group: { _id: "$accentTheme", count: { $sum: 1 } } },
@@ -78,6 +83,7 @@ export const getAllWrapped = async () => {
 
     return {
         totalWraps,
+        users,
         topTheme: topThemeResult[0] || null,
         topEra: topEraResult[0] || null,
         topMusic: topMusicResult[0] || null,
@@ -86,5 +92,31 @@ export const getAllWrapped = async () => {
         topEras,
         wrapsOverTime,
         // results
+    }
+}
+
+export const getWraps = async (params: { limit: number; cursor?: string; sort: 'asc' | 'desc' }) => {
+    const { limit, cursor, sort } = params
+    const query: any = {}
+
+    if (cursor) {
+        const cursorDate = new Date(cursor)
+        if (!isNaN(cursorDate.getTime())) {
+            query.createdAt = sort === 'desc' ? { $lt: cursorDate } : { $gt: cursorDate }
+        }
+    }
+
+    const items = await collections.wrapped.find(query)
+        .sort({ createdAt: sort === 'desc' ? -1 : 1 })
+        .limit(limit + 1) // Fetch one extra to check for next page
+
+
+    const hasNextPage = items.length > limit
+    const edges = hasNextPage ? items.slice(0, limit) : items
+
+    return {
+        items: edges,
+        nextCursor: hasNextPage ? edges[edges.length - 1]?.createdAt : null,
+        hasNextPage
     }
 }

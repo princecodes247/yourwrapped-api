@@ -21,6 +21,12 @@ const envSchema = z.object({
   S3_ACCESS_KEY_ID: z.string(),
   S3_SECRET_ACCESS_KEY: z.string(),
   S3_ENDPOINT: z.string().optional(),
+
+  ADMIN_USERNAME: z.string(),
+  ADMIN_PASSWORD: z.string(),
+
+  JWT_SECRET: z.string().default('jwt-secret'),
+  JWT_EXPIRATION: z.number().default(300000000),
 })
 
 // Parse and validate the environment variables
