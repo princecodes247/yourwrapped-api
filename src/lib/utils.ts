@@ -1,26 +1,12 @@
 import type { NextFunction, Request, Response } from 'express'
 import { randomBytes } from 'crypto'
+import jwt from 'jsonwebtoken';
+import env from '../config';
 
 export const getQueryParam = (req: Request, param: string) => {
   const target = req.query[param]
   if (!target) return null
   return Array.isArray(target) ? target.join('') : target.toString()
-}
-
-type AsyncController = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => Promise<void>
-
-export const asyncHandler = (fn: AsyncController) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await fn(req, res, next)
-    } catch (error) {
-      next(error)
-    }
-  }
 }
 
 const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -96,4 +82,12 @@ export const sanitizeSensitiveData = (data: any, additionalKeys: string[] = []):
   }
 
   return sanitized
+}
+
+export const createTokens = (details: { id: string; }) => {
+  const accessToken = jwt.sign(details, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRATION }); // 1 day expiration for now
+
+  return {
+    accessToken,
+  }
 }

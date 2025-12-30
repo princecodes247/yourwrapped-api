@@ -74,7 +74,7 @@ export const asyncHandler = (fn: AsyncController, config?: RouterConfig): Reques
         )
       }
     } catch (error: any) {
-      logger.error(`Error: ${error?.message}`, { error })
+      // logger.error(`Error: ${error?.message}`, { error })
       next(error instanceof Error ? error : new Error("An unexpected error occurred"))
     }
   }

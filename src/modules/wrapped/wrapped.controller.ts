@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express'
-import { asyncHandler } from '../../lib/utils'
 import * as wrappedService from './wrapped.service'
 import { getWrapsSchema } from './wrapped.validation'
 
