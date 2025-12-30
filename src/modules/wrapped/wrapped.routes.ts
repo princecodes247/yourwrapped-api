@@ -13,7 +13,9 @@ const router = createRouter({
 
 router.post('/upload', upload.single('image'), wrappedController.uploadImage)
 router.get('/image', wrappedController.getImage)
-router.get('/stats', authMiddleware, wrappedController.getWrappedStats)
+router.get('/stats',
+    //  authMiddleware,
+    wrappedController.getWrappedStats)
 router.get('/list', authMiddleware, devOnlyMiddleware, validateRequest({ query: getWrapsSchema }), wrappedController.getWraps)
 router.post('/', validateRequest({ body: createWrappedSchema }), wrappedController.createWrapped)
 router.get('/:slug', wrappedController.getWrapped)
