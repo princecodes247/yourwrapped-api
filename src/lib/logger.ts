@@ -107,7 +107,8 @@ export class ConsoleLogger extends Logger {
     //   meta && Object.keys(meta).length
     //     ? chalk.dim(JSON.stringify(meta))
     //     : ''
-    console.log(`${this.timestamp()} ${pill} ${message}`, meta ?? "")
+    console.log(`${this.timestamp()} ${pill} ${message}`)
+    // console.log(`${this.timestamp()} ${pill} ${message}`, meta ?? "")
   }
 }
 
@@ -154,7 +155,7 @@ export class CompositeLogger extends Logger {
 
 const logger = new CompositeLogger(
   new ConsoleLogger((process.env?.LOG_LEVEL || LogLevel.DEBUG) as LogLevelType),
-  new FileLogger('/logs/app.log', (process.env?.LOG_LEVEL || LogLevel.DEBUG) as LogLevelType),
+  // new FileLogger('/logs/app.log', (process.env?.LOG_LEVEL || LogLevel.DEBUG) as LogLevelType),
 )
 
 export default logger
